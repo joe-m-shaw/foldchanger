@@ -6,4 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of foldchanger is to …
+foldchanger is a package for performing fold change calculations.
+
+These calculations are used for the detection of genetic copy number
+variants by next generation sequencing. I am building foldchanger as a
+mini-project to teach myself R package development.
