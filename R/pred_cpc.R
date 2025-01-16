@@ -12,7 +12,7 @@ pred_cpc <- function(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 0) {
   #' @return Copies per cell
   #' @export
   #'
-  #' @examples
+  #' @examples pred_cpc(fc = 11, ncc = 65, dir = "gain")
 
   check_dir(dir)
 

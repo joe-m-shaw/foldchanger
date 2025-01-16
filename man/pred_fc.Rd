@@ -19,6 +19,12 @@ pred_fc(tumour_cpc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 1)
 
 \item{digits}{Digits to round the fold change to}
 }
+\value{
+The predicted fold change
+}
 \description{
 Predict fold change from copies per cell
+}
+\examples{
+pred_fc(tumour_cpc = 109, ncc = 26, dir = "gain")
 }

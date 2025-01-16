@@ -52,7 +52,9 @@ Or you want to `change` between the two forms of fold change and
 log2ratio:
 
 ``` r
-#change(1, from = "fcgain", to = "log2r")
+change(1, from = "fcgain", to = "log2r")
+#> [1] 0
 
-#change(-1, from = "log2r", to = "fcloss")
+change(-1, from = "log2r", to = "fcloss")
+#> [1] -2
 ```

@@ -10,10 +10,10 @@ pred_fc <- function(tumour_cpc, ncc, dir, ref_cpc = 2,
   #' @param ref_cpc Copies of gene locus per reference cohort cell
   #' @param digits Digits to round the fold change to
   #'
-  #' @return
+  #' @return The predicted fold change
   #' @export
   #'
-  #' @examples
+  #' @examples pred_fc(tumour_cpc = 109, ncc = 26, dir = "gain")
 
   check_dir(dir)
 

@@ -7,7 +7,7 @@ check_dir <- function(x) {
   #' @return Errors if fold change not supplied as "gain" or "loss"
   #' @export
   #'
-  #' @examples
+  #' @examples check_dir("loss")
 
   if(!x %in% c("gain", "loss")){
     stop("direction must be either gain or loss")

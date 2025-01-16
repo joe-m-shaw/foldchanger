@@ -1,4 +1,14 @@
 change <- function(input, from, to) {
+  #' Change between fold change and log2 ratios
+  #'
+  #' @param input Input value
+  #' @param from The format to change from
+  #' @param to The format to change to
+  #'
+  #' @return The calculated output
+  #' @export
+  #'
+  #' @examples change(-1, from = "log2r", to = "fcloss")
 
   if(from == "log2r" & to == "fcgain") {
 

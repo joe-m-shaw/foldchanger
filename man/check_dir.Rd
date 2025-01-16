@@ -15,3 +15,6 @@ Errors if fold change not supplied as "gain" or "loss"
 \description{
 Check fold change direction argument is appropriate
 }
+\examples{
+check_dir("loss")
+}

@@ -25,3 +25,6 @@ Copies per cell
 \description{
 Predict copies per cell
 }
+\examples{
+pred_cpc(fc = 11, ncc = 65, dir = "gain")
+}

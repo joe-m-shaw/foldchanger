@@ -2,6 +2,7 @@
 
 export(calc_fc)
 export(calc_tc)
+export(change)
 export(check_dir)
 export(pred_cpc)
 export(pred_fc)
