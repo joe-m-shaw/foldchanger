@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# foldchanger
+# foldchanger <img src="man/figures/logo.png" align="right" height="134" alt="" />
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -54,6 +54,9 @@ log2ratio:
 ``` r
 change(1, from = "fcgain", to = "log2r")
 #> [1] 0
+```
+
+``` r
 
 change(-1, from = "log2r", to = "fcloss")
 #> [1] -2

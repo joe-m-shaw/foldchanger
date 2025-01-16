@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# foldchanger
+# foldchanger <img src="man/figures/logo.png" align="right" height="134" alt="" />
 
 <!-- badges: start -->
 <!-- badges: end -->
