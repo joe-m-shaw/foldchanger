@@ -1,4 +1,4 @@
-pred_cpc <- function(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2) {
+pred_cpc <- function(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 0) {
 
   #' Predict copies per cell
   #'
@@ -7,6 +7,7 @@ pred_cpc <- function(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2) {
   #' @param dir Fold change direction, must be "gain" or "loss"
   #' @param ref_cpc Copies per cell for reference cohort
   #' @param stroma_cpc Copies per cell for patient stroma
+  #' @param digits The number of decimal places to round to
   #'
   #' @return Copies per cell
   #' @export
@@ -25,7 +26,7 @@ pred_cpc <- function(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2) {
 
   tumour_tc <- total_copies - stroma_tc
 
-  tumour_cpc <- tumour_tc / ncc
+  tumour_cpc <- round(tumour_tc / ncc, digits = digits)
 
   return(tumour_cpc)
 

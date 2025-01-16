@@ -4,7 +4,7 @@
 \alias{pred_cpc}
 \title{Predict copies per cell}
 \usage{
-pred_cpc(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2)
+pred_cpc(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 0)
 }
 \arguments{
 \item{fc}{Fold change}
@@ -16,6 +16,8 @@ pred_cpc(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2)
 \item{ref_cpc}{Copies per cell for reference cohort}
 
 \item{stroma_cpc}{Copies per cell for patient stroma}
+
+\item{digits}{The number of decimal places to round to}
 }
 \value{
 Copies per cell

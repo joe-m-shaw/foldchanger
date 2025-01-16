@@ -1,5 +1,5 @@
 pred_fc <- function(tumour_cpc, ncc, dir, ref_cpc = 2,
-                    stroma_cpc = 2, digits = 2) {
+                    stroma_cpc = 2, digits = 1) {
 
   #' Predict fold change from copies per cell
   #'

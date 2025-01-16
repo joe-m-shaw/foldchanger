@@ -4,7 +4,7 @@
 \alias{pred_fc}
 \title{Predict fold change from copies per cell}
 \usage{
-pred_fc(tumour_cpc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 2)
+pred_fc(tumour_cpc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 1)
 }
 \arguments{
 \item{tumour_cpc}{Copies of gene locus per tumour cell}
