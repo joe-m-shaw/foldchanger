@@ -1,5 +1,5 @@
 ---
-title: "fold-changes"
+title: "Fold changes"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fold-changes}
@@ -14,6 +14,112 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include = FALSE}
 library(foldchanger)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+# Introduction
+
+Detection dosage changes of genes within cancer cells can have important 
+implications for prognosis and treatment. Cancer samples comprise of a mixture
+of cells from the cancer itself and normal patient tissue (stroma).
+
+Consequently, DNA extracted from cancer samples is a mixture of DNA from cancer
+cells and stromal cells.
+
+Using Illumina next generation sequencing (NGS), gene dosage can be calculated 
+using "depth-of-coverage" methods: the number of sequencing reads mapping to a particular locus is used to infer the dosage of that locus within the sample.
+
+The **observed** number of reads can be compared to the **expected** number of 
+reads for that gene locus. The expected value is derived from a cohort of 
+normal tissue samples tested with the same NGS process.
+
+# Equations
+
+There are different ways of presenting the relationship between observed and 
+expected read depth.
+
+Firstly, you can take the log2 ratio of observed vs expected read depth.
+
+$$
+log2ratio = log2(observed / expected)
+$$ 
+
+Alternatively, a "fold change" can be calculated. Two separate fold change
+calculations are used by Qiagen for calculating gains and losses of genetic
+information (described in the CLC handbook, section [Copy number and fold change](https://resources.qiagenbioinformatics.com/manuals/clcgenomicsworkbench/2305/index.php?manual=Copy_number_fold_change.html)).
+
+Fold change for gains is calculated as:
+
+$$
+fcgain = observed / expected
+$$
+
+Fold change for losses is calculated as:
+
+$$
+fcloss = - (expected / observed)
+$$
+
+# Rationale
+
+Having two different equations for fold change may seem confusing, but the 
+reason is to allow greater precision in dosage measurement.
+
+```{r df, include = FALSE}
+
+df <- data.frame(
+  "obs" = seq(0, 5000, by = 1),
+  "exp" = 100) |>
+  mutate(
+    log2r = calc_log2r(obs, exp),
+    fc_gain = calc_fc(obs, exp, "gain"),
+    fc_loss = calc_fc(obs, exp, "loss")) |>
+  pivot_longer(cols = c(log2r, fc_gain, fc_loss),
+               names_to = "metric",
+               values_to = "value") |>
+  mutate(ratio = obs/exp)
+
+```
+
+The fold change loss equation provides more differentiation between coverage
+levels when fewer reads are observed than expected.
+
+```{r plot1, echo = FALSE}
+
+below1_plot <- ggplot(df, aes(x = ratio, y = value)) +
+  geom_line(aes(colour = metric), linewidth = 1) +
+  coord_cartesian(xlim = c(0, 1),
+
+                  ylim = c(-24, 2)) +
+  theme_bw() +
+  scale_x_continuous(breaks = seq(0, 1, by = 0.1)) +
+  scale_y_continuous(breaks = seq(-24, 2, by = 2)) +
+  labs(colour = "", x = "Ratio of observed:expected",
+       y = "Value")
+
+below1_plot
+
+```
+
+Conversely, the fold change gain equation is more useful when gene 
+amplifications are present: the number of observed reads may be several fold
+higher than expected.
+
+```{r plot2, echo = FALSE}
+
+above1_plot <- ggplot(df, aes(x = ratio, y = value)) +
+  geom_line(aes(colour = metric), linewidth = 1) +
+  coord_cartesian(xlim = c(1, 50), ylim = c(-10, 50)) +
+  scale_x_continuous(breaks = c(1, seq(10, 50, by = 10))) +
+  scale_y_continuous(breaks = seq(-10, 50, by = 10)) +
+  theme_bw() +
+  labs(colour = "", x = "Ratio of observed:expected",
+       y = "Value")
+
+above1_plot
+
 ```
