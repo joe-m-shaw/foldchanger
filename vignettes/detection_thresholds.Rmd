@@ -1,5 +1,5 @@
 ---
-title: "Detection Thresholds"
+title: "Detection thresholds"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{detection_thresholds}
