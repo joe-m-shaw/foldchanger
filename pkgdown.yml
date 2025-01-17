@@ -2,8 +2,9 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  fold-changes: fold-changes.html
-last_built: 2025-01-17T09:20Z
+  detection_thresholds: detection_thresholds.html
+  dosage_calculations: dosage_calculations.html
+last_built: 2025-01-17T10:04Z
 urls:
   reference: https://joe-m-shaw.github.io/foldchanger/reference
   article: https://joe-m-shaw.github.io/foldchanger/articles
