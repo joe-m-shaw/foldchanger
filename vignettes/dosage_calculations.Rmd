@@ -1,5 +1,5 @@
 ---
-title: "Fold changes"
+title: "Dosage calculations"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{fold-changes}
