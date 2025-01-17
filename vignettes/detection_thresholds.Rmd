@@ -1,0 +1,60 @@
+---
+title: "Detection Thresholds"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{detection_thresholds}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = FALSE}
+library(foldchanger)
+library(dplyr)
+library(ggplot2)
+```
+
+Analytical pipelines require detection thresholds for gene dosage. The application
+of thresholds allows the pipeline to classify a gene region as a particular
+dosage state, such as "normal", "gain" or "loss".
+
+However, determining the sensitivity of a threshold can be challenging. This is
+because the accuracy of the threshold will depend on the sample's neoplastic cell 
+content (NCC) and the number of gene copies per cell; both of these values vary
+between samples.
+
+Using the `pred_cpc` function, we can plot detection limit for a fold change 
+threshold of 2.8.
+
+```{r, echo = FALSE}
+
+df <- data.frame(ncc = seq(0, 100, by = 0.1)) |> 
+  mutate(gene_copies = pred_cpc(fc = 2.8, ncc = ncc, dir = "gain",
+                                digits = 3))
+
+gain_lod_plot <- df |> 
+  filter(gene_copies <= 100) |> 
+  ggplot(aes(x = gene_copies, y = ncc)) +
+  geom_line(linewidth = 1) +
+  theme_bw() +
+  labs(x = "Gene copies per cell", y = "Neoplastic cell content (%)",
+       title = "Detection limit for gains",
+       subtitle = "Fold change threshold of 2.8") +
+  scale_y_continuous(limits = c(0, 100), breaks = seq(0,100,10),
+                     minor_breaks = FALSE) +
+  scale_x_continuous(limits = c(0, 100), breaks = seq(0,100,10),
+                     minor_breaks = FALSE) +
+  annotate(geom = "text", x = 30, y = 30, label = "Detected") +
+  annotate(geom = "text", x = 30, y = 5, label = "Not detected") 
+
+gain_lod_plot
+
+```
+
+
