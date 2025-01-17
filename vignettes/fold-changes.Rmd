@@ -123,3 +123,104 @@ above1_plot <- ggplot(df, aes(x = ratio, y = value)) +
 above1_plot
 
 ```
+
+# Simulated data
+
+We can see how the different equations present an artificial dataset. This fake
+chromosome has a region of normal dosage, then an amplified region, then a region
+with a dosage loss.
+
+```{r fake-data, include = FALSE}
+
+norm_data <- data.frame(
+  "position" = seq(1, 600, by = 1)) |> 
+  mutate(
+    exp = round(runif(n=600, min=800, max=1000), 0),
+    obs = round(runif(n=600, min=800, max=1000), 0))
+    
+amp_data <-   data.frame(
+  "position" = seq(601, 800, by = 1)) |> 
+  mutate(
+    exp = round(runif(n=200, min=800, max=1000), 0),
+    obs = round(runif(n=200, min=9500, max=10000), 0))
+    
+del_data <- data.frame(
+  "position" = seq(801, 1000, by = 1)) |> 
+  mutate(
+    exp = round(runif(n=200, min=800, max=1000), 0),
+    obs = round(runif(n=200, min=300, max=400), 0))
+
+gene_data <- rbind(norm_data, amp_data, del_data) |> 
+  mutate(
+    ratio = obs / exp,
+    log2r = calc_log2r(obs, exp),
+         fcgain = change(log2r, from = "log2r", to = "fcgain"),
+         fcloss = change(log2r, from = "log2r", to = "fcloss"),
+         fccombined = case_when(
+            obs >= exp ~change(log2r, from = "log2r", to = "fcgain"),
+            obs < exp ~change(log2r, from = "log2r", to = "fcloss")))
+  
+```
+
+The log2 ratio looks like this. 
+
+```{r log2r-plot, echo = FALSE}
+
+log2r_plot <- ggplot(gene_data, aes(x = position, y = log2r)) +
+  geom_jitter(shape = 21, width = 0, height = 0.5) +
+  theme_bw() +
+  ylim(-5, 15) +
+  labs(x = "Position", y = "Log2 ratio")
+
+log2r_plot
+
+```
+
+The fold change gain equation looks like this. Notice how the amplified region 
+is "pulled up" and is more separated from the normal dosage region, and that 
+the normal dosage region now has an average value of 1, not 0.
+
+```{r, fcgain-plot, echo = FALSE}
+
+fcgain_plot <- ggplot(gene_data, aes(x = position, y = fcgain)) +
+  geom_jitter(shape = 21, width = 0, height = 0.5) +
+  theme_bw() +
+  ylim(-5, 15) +
+  labs(x = "Position", y = "Fold change (gain)")
+
+fcgain_plot
+
+```
+
+And the fold change loss equation looks like this. In the reverse to the gain 
+equation, the loss equation pulls the deleted region further from the normal
+dosage baseline, and the normal dosage region now has an average value of -1.
+
+```{r, fcloss-plot, echo = FALSE}
+
+fcloss_plot <- ggplot(gene_data, aes(x = position, y = fcloss)) +
+  geom_jitter(shape = 21, width = 0, height = 0.5) +
+  theme_bw() +
+  ylim(-5, 15) +
+  labs(x = "Position", y = "Fold change (loss)")
+
+fcloss_plot
+
+```
+
+We can also combine the fold change equations, so that the gain equation is used
+when the observed dosage is higher than expected, and the loss equation is used
+when the observed dosage is lower than expected. This results in a "splitting"
+of the central cluster of normal dosage points.
+
+```{r, fccombined-plot, echo = FALSE}
+
+fccomb_plot <- ggplot(gene_data, aes(x = position, y = fccombined)) +
+  geom_jitter(shape = 21, width = 0, height = 0.5) +
+  theme_bw() +
+  ylim(-5, 15) +
+  labs(x = "Position", y = "Fold change (gain and loss)")
+
+fccomb_plot
+
+```

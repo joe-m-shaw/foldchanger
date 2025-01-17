@@ -18,3 +18,4 @@ Suggests:
     tidyr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+URL: https://joe-m-shaw.github.io/foldchanger/
