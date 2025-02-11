@@ -35,7 +35,9 @@ threshold of 2.8.
 ```{r, echo = FALSE}
 
 df <- data.frame(ncc = seq(0, 100, by = 0.1)) |> 
-  mutate(gene_copies = pred_cpc(fc = 2.8, ncc = ncc, dir = "gain",
+  mutate(gene_copies = pred_cpc(fc = 2.8, 
+                                ncc = ncc, 
+                                dir = "gain",
                                 digits = 3))
 
 gain_lod_plot <- df |> 
