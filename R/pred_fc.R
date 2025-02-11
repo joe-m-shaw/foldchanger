@@ -17,8 +17,6 @@ pred_fc <- function(tumour_cpc, ncc, dir, ref_cpc = 2,
 
   check_dir(dir)
 
-  #check_ncc(ncc)
-
   # The number of copies of a reference locus per cell (2)
   # multiplied by 100 cells.
   ref_tc <- calc_tc(ref_cpc)
