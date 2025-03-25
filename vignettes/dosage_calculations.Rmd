@@ -67,10 +67,12 @@ $$
 # Rationale
 
 Having two different equations for fold change may seem confusing, but the 
-reason is to allow greater precision in dosage measurement.
+reason is to allow greater precision in dosage measurement. We can explore this
+with `foldchanger` by creating a dataset of observed and expected values from
+a fictional experiment and then calculating dosage in different formats using
+the `calc_fc` and `calc_log2r` functions.
 
-```{r df, include = FALSE}
-
+```{r df, include = TRUE}
 df <- data.frame(
   "obs" = seq(0, 5000, by = 1),
   "exp" = 100) |>
@@ -81,8 +83,10 @@ df <- data.frame(
   pivot_longer(cols = c(log2r, fc_gain, fc_loss),
                names_to = "metric",
                values_to = "value") |>
-  mutate(ratio = obs/exp)
-
+  mutate(ratio = obs/exp,
+         metric = factor(metric, levels = c("fc_gain", 
+                                            "log2r", 
+                                            "fc_loss")))
 ```
 
 The fold change loss equation provides more differentiation between coverage
@@ -93,8 +97,9 @@ levels when fewer reads are observed than expected.
 below1_plot <- ggplot(df, aes(x = ratio, y = value)) +
   geom_line(aes(colour = metric), linewidth = 1) +
   scale_colour_discrete(labels = c("Fold change (gain)",
-                                 "Fold change (loss)",
-                                 "Log2 ratio")) +
+                                 "Log2 ratio",
+                                 "Fold change (loss)"),
+                        type = c("#56B4E9",  "#000000", "#0072B2")) +
   coord_cartesian(xlim = c(0, 1),
 
                   ylim = c(-24, 2)) +
@@ -117,8 +122,9 @@ higher than expected.
 above1_plot <- ggplot(df, aes(x = ratio, y = value)) +
   geom_line(aes(colour = metric), linewidth = 1) +
   scale_colour_discrete(labels = c("Fold change (gain)",
-                                 "Fold change (loss)",
-                                 "Log2 ratio")) +
+                                 "Log2 ratio",
+                                 "Fold change (loss)"),
+                        type = c("#56B4E9",  "#000000", "#0072B2")) +
   coord_cartesian(xlim = c(1, 50), ylim = c(-10, 50)) +
   scale_x_continuous(breaks = c(1, seq(10, 50, by = 10))) +
   scale_y_continuous(breaks = seq(-10, 50, by = 10)) +
@@ -175,7 +181,8 @@ The log2 ratio looks like this.
 log2r_plot <- ggplot(gene_data, aes(x = position, y = log2r)) +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  ylim(-5, 15) +
+  scale_y_continuous(limits = c(-5, 15),
+                     breaks = seq(-5, 15, by = 1)) +
   labs(x = "Position", y = "Log2 ratio")
 
 log2r_plot
@@ -191,7 +198,8 @@ the normal dosage region now has an average value of 1, not 0.
 fcgain_plot <- ggplot(gene_data, aes(x = position, y = fcgain)) +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  ylim(-5, 15) +
+  scale_y_continuous(limits = c(-5, 15),
+                     breaks = seq(-5, 15, by = 1)) +
   labs(x = "Position", y = "Fold change (gain)")
 
 fcgain_plot
@@ -207,7 +215,8 @@ dosage baseline, and the normal dosage region now has an average value of -1.
 fcloss_plot <- ggplot(gene_data, aes(x = position, y = fcloss)) +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  ylim(-5, 15) +
+  scale_y_continuous(limits = c(-5, 15),
+                     breaks = seq(-5, 15, by = 1)) +
   labs(x = "Position", y = "Fold change (loss)")
 
 fcloss_plot
@@ -224,7 +233,8 @@ of the central cluster of normal dosage points.
 fccomb_plot <- ggplot(gene_data, aes(x = position, y = fccombined)) +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  ylim(-5, 15) +
+  scale_y_continuous(limits = c(-5, 15),
+                     breaks = seq(-5, 15, by = 1)) +
   labs(x = "Position", y = "Fold change (gain and loss)")
 
 fccomb_plot
