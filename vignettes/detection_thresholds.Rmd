@@ -69,7 +69,7 @@ gain_lod_plot <- df_amp |>
 gain_lod_plot
 ```
 
-## Deletions
+# Deletions
 
 For gene deletions, the number of gene copies per tumour cell is more limited.
 Assuming that the cell is diploid, the cell can have a normal gene copy number
