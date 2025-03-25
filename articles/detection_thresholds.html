@@ -77,10 +77,60 @@ region as a particular dosage state, such as “normal”, “gain” or
 challenging. This is because the accuracy of the threshold will depend
 on the sample’s neoplastic cell content (NCC) and the number of gene
 copies per cell; both of these values vary between samples.</p>
-<p>Using the <code>pred_cpc</code> function, we can plot detection limit
-for a fold change threshold of 2.8.</p>
-<p><img src="detection_thresholds_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-  </main>
+<div class="section level2">
+<h2 id="amplifications">Amplifications<a class="anchor" aria-label="anchor" href="#amplifications"></a>
+</h2>
+<p>In cancer, oncogenes can be amplified to copy numbers rangeing from
+tens to hundreds of copies above the standard 2 copies per cell. Using
+the <code>pred_cpc</code> function, we can predict the gene copies per
+tumour cell which would be detected at different neoplastic cell
+contents when a fold change threshold of 2.8 is applied.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">df_amp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ncc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>gene_copies <span class="op">=</span> <span class="fu"><a href="../reference/pred_cpc.html">pred_cpc</a></span><span class="op">(</span>fc <span class="op">=</span> <span class="fl">2.8</span>, </span>
+<span>                                ncc <span class="op">=</span> <span class="va">ncc</span>, </span>
+<span>                                dir <span class="op">=</span> <span class="st">"gain"</span>,</span>
+<span>                                digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>We can then use <code>ggplot</code> to show the results.</p>
+<p><img src="detection_thresholds_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<div class="section level3">
+<h3 id="deletions">Deletions<a class="anchor" aria-label="anchor" href="#deletions"></a>
+</h3>
+<p>For gene deletions, the number of gene copies per tumour cell is more
+limited. Assuming that the cell is diploid, the cell can have a normal
+gene copy number of 2, or a copy number of 1 if the gene has been
+heterozygously deleted, or a copy number of 0 if the gene has been
+homozygously deleted.</p>
+<p>By using the <code>pred_fc</code> function, we can predict the fold
+changes for each deletion state at different neoplastic cell
+contents.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_del</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ncc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>fold_change_normal <span class="op">=</span> <span class="fu"><a href="../reference/pred_fc.html">pred_fc</a></span><span class="op">(</span>tumour_cpc <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                                      ncc <span class="op">=</span> <span class="va">ncc</span>,</span>
+<span>                                      dir <span class="op">=</span> <span class="st">"loss"</span>,</span>
+<span>                                      digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>         fold_change_het_del <span class="op">=</span> <span class="fu"><a href="../reference/pred_fc.html">pred_fc</a></span><span class="op">(</span>tumour_cpc <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                       ncc <span class="op">=</span> <span class="va">ncc</span>,</span>
+<span>                                       dir <span class="op">=</span> <span class="st">"loss"</span>,</span>
+<span>                                       digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>         fold_change_hom_del <span class="op">=</span> <span class="fu"><a href="../reference/pred_fc.html">pred_fc</a></span><span class="op">(</span>tumour_cpc <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                                       ncc <span class="op">=</span> <span class="va">ncc</span>,</span>
+<span>                                       dir <span class="op">=</span> <span class="st">"loss"</span>,</span>
+<span>                                       digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="op">-</span><span class="va">ncc</span>,</span>
+<span>               names_to <span class="op">=</span> <span class="st">"del_state"</span>,</span>
+<span>               values_to <span class="op">=</span> <span class="st">"fold_change"</span><span class="op">)</span></span></code></pre></div>
+<p>By plotting the results, we can see that determination of the
+neoplastic cell content is critical for differentiating between
+homozygous and heterozygous deletions when the fold change is greater
+than -2.</p>
+<p><img src="detection_thresholds_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
