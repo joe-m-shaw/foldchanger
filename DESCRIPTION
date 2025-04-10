@@ -15,7 +15,8 @@ Suggests:
     testthat (>= 3.0.0),
     dplyr,
     ggplot2,
-    tidyr
+    tidyr,
+    patchwork
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 URL: https://joe-m-shaw.github.io/foldchanger/

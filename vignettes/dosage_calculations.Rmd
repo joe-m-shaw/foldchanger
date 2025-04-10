@@ -19,6 +19,7 @@ library(foldchanger)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(patchwork)
 ```
 
 # Introduction
@@ -145,22 +146,22 @@ with a dosage loss.
 ```{r fake-data, include = FALSE}
 
 norm_data <- data.frame(
-  "position" = seq(1, 600, by = 1)) |> 
+  "position" = seq(1, 200, by = 1)) |> 
   mutate(
-    exp = round(runif(n=600, min=800, max=1000), 0),
-    obs = round(runif(n=600, min=800, max=1000), 0))
+    exp = round(runif(n=200, min=800, max=1000), 0),
+    obs = round(runif(n=200, min=800, max=1000), 0))
     
 amp_data <-   data.frame(
-  "position" = seq(601, 800, by = 1)) |> 
+  "position" = seq(201, 400, by = 1)) |> 
   mutate(
     exp = round(runif(n=200, min=800, max=1000), 0),
-    obs = round(runif(n=200, min=9500, max=10000), 0))
+    obs = round(runif(n=200, min=3800, max=4000), 0))
     
 del_data <- data.frame(
-  "position" = seq(801, 1000, by = 1)) |> 
+  "position" = seq(401, 600, by = 1)) |> 
   mutate(
     exp = round(runif(n=200, min=800, max=1000), 0),
-    obs = round(runif(n=200, min=300, max=400), 0))
+    obs = round(runif(n=200, min=200, max=250), 0))
 
 gene_data <- rbind(norm_data, amp_data, del_data) |> 
   mutate(
@@ -179,11 +180,13 @@ The log2 ratio looks like this.
 ```{r log2r-plot, echo = FALSE}
 
 log2r_plot <- ggplot(gene_data, aes(x = position, y = log2r)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  scale_y_continuous(limits = c(-5, 15),
-                     breaks = seq(-5, 15, by = 1)) +
-  labs(x = "Position", y = "Log2 ratio")
+  scale_y_continuous(limits = c(-7, 7),
+                     breaks = seq(-7, 7, by = 1)) +
+  scale_x_continuous(labels = NULL) +
+  labs(x = "", y = "Log2 ratio")
 
 log2r_plot
 
@@ -196,11 +199,13 @@ the normal dosage region now has an average value of 1, not 0.
 ```{r, fcgain-plot, echo = FALSE}
 
 fcgain_plot <- ggplot(gene_data, aes(x = position, y = fcgain)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  scale_y_continuous(limits = c(-5, 15),
-                     breaks = seq(-5, 15, by = 1)) +
-  labs(x = "Position", y = "Fold change (gain)")
+  scale_y_continuous(limits = c(-7, 7),
+                     breaks = seq(-7, 7, by = 1)) +
+  scale_x_continuous(labels = NULL) +
+  labs(x = "", y = "Fold change (gain)")
 
 fcgain_plot
 
@@ -213,11 +218,13 @@ dosage baseline, and the normal dosage region now has an average value of -1.
 ```{r, fcloss-plot, echo = FALSE}
 
 fcloss_plot <- ggplot(gene_data, aes(x = position, y = fcloss)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  scale_y_continuous(limits = c(-5, 15),
-                     breaks = seq(-5, 15, by = 1)) +
-  labs(x = "Position", y = "Fold change (loss)")
+  scale_y_continuous(limits = c(-7, 7),
+                     breaks = seq(-7, 7, by = 1)) +
+  scale_x_continuous(labels = NULL) +
+  labs(x = "", y = "Fold change (loss)")
 
 fcloss_plot
 
@@ -231,12 +238,26 @@ of the central cluster of normal dosage points.
 ```{r, fccombined-plot, echo = FALSE}
 
 fccomb_plot <- ggplot(gene_data, aes(x = position, y = fccombined)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
   geom_jitter(shape = 21, width = 0, height = 0.5) +
   theme_bw() +
-  scale_y_continuous(limits = c(-5, 15),
-                     breaks = seq(-5, 15, by = 1)) +
-  labs(x = "Position", y = "Fold change (gain and loss)")
+  scale_y_continuous(limits = c(-7, 7),
+                     breaks = seq(-7, 7, by = 1)) +
+  scale_x_continuous(labels = NULL) +
+  labs(x = "", y = "Fold change (gain and loss)")
 
 fccomb_plot
+
+```
+
+For ease of comparison, here are all four ways of plotting the data next to 
+each other.
+
+```{r, all-plots,  echo = FALSE}
+
+all_plots <- log2r_plot + fcgain_plot + fcloss_plot + fccomb_plot +
+  plot_layout(ncol = 2, nrow = 2)
+
+all_plots
 
 ```
