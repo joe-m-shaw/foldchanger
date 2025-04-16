@@ -4,6 +4,9 @@
 # foldchanger <img src="man/figures/logo.png" align="right" height="250" alt=""/>
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/joe-m-shaw/foldchanger/graph/badge.svg)](https://app.codecov.io/gh/joe-m-shaw/foldchanger)
 <!-- badges: end -->
 
 foldchanger is a package for performing fold change calculations.
