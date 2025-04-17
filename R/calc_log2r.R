@@ -1,9 +1,10 @@
-calc_log2r <- function(obs, exp) {
+calc_log2r <- function(obs, exp, digits = 3) {
 
   #' Calculate log2 ratios
   #'
   #' @param obs Observed reads
   #' @param exp Expected reads
+  #' @param digits Number of decimal places
   #'
   #' @return Log2 ratio
   #' @export
@@ -12,6 +13,6 @@ calc_log2r <- function(obs, exp) {
 
   log2 <- log2(obs/exp)
 
-  return(log2)
+  return(round(log2, digits))
 
 }
