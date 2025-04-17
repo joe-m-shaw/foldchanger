@@ -18,7 +18,13 @@ pred_cpc <- function(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 0) {
 
   ref_tc <- calc_tc(ref_cpc)
 
-  total_copies <- fc * ref_tc
+  if(dir == "gain") {
+    total_copies <- fc * ref_tc
+  }
+
+  if(dir == "loss") {
+    total_copies <- ref_tc / (fc/-1)
+  }
 
   stroma_tc <- calc_tc(cpc = stroma_cpc, cells = 100-ncc)
 
