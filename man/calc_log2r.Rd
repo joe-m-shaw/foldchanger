@@ -4,12 +4,14 @@
 \alias{calc_log2r}
 \title{Calculate log2 ratios}
 \usage{
-calc_log2r(obs, exp)
+calc_log2r(obs, exp, digits = 3)
 }
 \arguments{
 \item{obs}{Observed reads}
 
 \item{exp}{Expected reads}
+
+\item{digits}{Number of decimal places}
 }
 \value{
 Log2 ratio
