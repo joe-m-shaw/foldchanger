@@ -43,3 +43,23 @@ test_that("pred_fc works for losses with intermediate NCC", {
                        dir = "loss",digits = 2),
                -1.81)
 })
+
+test_that("pred_fc works with a dataframe", {
+
+  df <- data.frame(
+    x = c(2, 4, 10),
+    y = c(100, 100, 100))
+
+  df_predicted <- data.frame(
+    x = c(2, 4, 10),
+    y = c(100, 100, 100),
+    z = c(1, 2, 5))
+
+  expect_equal(df |>
+                 dplyr::mutate(z = pred_fc(
+                   tumour_cpc = x,
+                   ncc = y,
+                   dir = "gain"
+                 )),
+               df_predicted)
+})

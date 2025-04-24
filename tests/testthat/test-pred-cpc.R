@@ -62,3 +62,22 @@ test_that("pred_cpc works for losses when NCC is low", {
                         dir = "loss", digits = 2),
                -183.77)
 })
+
+test_that("pred_cpc works with a dataframe", {
+
+  df <- data.frame(
+    x = c(1, 2, 5),
+    y = c(100, 100, 100))
+
+
+  df_predicted <- data.frame(
+    x = c(1, 2, 5),
+    y = c(100, 100, 100),
+    z = c(2, 4, 10))
+
+  expect_equal(df |>
+                 dplyr::mutate(z = pred_cpc(fc = x,
+                                            ncc = y,
+                                            dir = "gain")),
+               df_predicted)
+})

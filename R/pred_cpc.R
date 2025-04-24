@@ -16,6 +16,8 @@ pred_cpc <- function(fc, ncc, dir, ref_cpc = 2, stroma_cpc = 2, digits = 0) {
 
   check_dir(dir)
 
+  check_ncc(ncc)
+
   ref_tc <- calc_tc(ref_cpc)
 
   if(dir == "gain") {
