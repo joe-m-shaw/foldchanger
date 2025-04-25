@@ -2,7 +2,7 @@ Package: foldchanger
 Title: Change Easily Between Dosage Formats
 Version: 0.0.0.9000
 Authors@R: 
-    person("Joe", "Shaw", , "joseph.shaw2@mft.nhs.uk", role = c("aut", "cre"),
+    person("Joe M.", "Shaw", , "joseph.shaw2@mft.nhs.uk", role = c("aut", "cre"),
     comment = c(ORCID = "0000-0002-5089-751X"))
 Description: Handy functions for working with dosage changes in cancer samples.
 License: MIT + file LICENSE

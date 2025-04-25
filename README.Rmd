@@ -38,7 +38,7 @@ pak::pak("joe-m-shaw/foldchanger")
 foldchanger provides a bunch of helpful functions to make interacting with fold
 changes and log2ratios easier.
 
-For example, `foldchanger::pred_cpc` can be used to predict the copies per 
+For example, `pred_cpc` can be used to predict the copies per 
 cell (CPC) of genes within a tumour sample, based on neoplastic cell content 
 (NCC) and fold change.
 
